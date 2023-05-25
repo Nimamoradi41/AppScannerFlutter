@@ -16,6 +16,7 @@ class TextApp extends StatelessWidget {
       child: Text(Title,
         textAlign: TextAlign.center,
         style: TextStyle(
+          backgroundColor: Colors.transparent,
             color: Mcolor,
             fontFamily: 'IranSans',
             fontSize: Fontsize,

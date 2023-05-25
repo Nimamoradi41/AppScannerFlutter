@@ -17,13 +17,16 @@ class ApiService{
   static Future<ModelScanner> Login(String Code) async{
     var login;
 
-    var request = http.MultipartRequest('POST', Uri.parse('http://172.10.10.128/ScannerKala/api/Scanner/ScannPro'));
+
+
+    var request = http.MultipartRequest('POST', Uri.parse('http://172.10.10.128:9595/ScannerKala/api/Scanner/ScannPro'));
     request.fields.addAll({
       'ID': Code.toString()
     });
 
 
-    print('object');
+
+    print(request.fields.toString());
     http.StreamedResponse response = await request.send().timeout(
       Duration(seconds: 10)) ;
 
