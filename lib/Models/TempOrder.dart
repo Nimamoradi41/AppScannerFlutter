@@ -1,10 +1,10 @@
 class TempOrder{
 
   late String Name;
-  late int Price;
+  late double Price;
   late int SumAll;
   late int Count;
-  late int Coka;
+  late String Coka;
 
 
 }

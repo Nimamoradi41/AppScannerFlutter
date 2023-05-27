@@ -56,7 +56,6 @@ class _MyAppState extends State<MyApp> {
   Future Run(String S)async{
     FlaLoading=true;
     var s=await ApiService.Login(S);
-    print(s.toJson().toString());
     if(s!=null)
       {
         if(s.success)
@@ -76,6 +75,7 @@ class _MyAppState extends State<MyApp> {
 
           }else{
           setState(() {
+            FlaLoading=false;
             FlagIsGreen=false;
             FlagError=true;
             MSg=s.msg;
@@ -85,6 +85,7 @@ class _MyAppState extends State<MyApp> {
 
       }else{
       setState(() {
+        FlaLoading=false;
         FlagIsGreen=false;
         startTimer();
         MSg="مشكلي در ارتباط با سرور به وجود آمده";
@@ -95,190 +96,205 @@ class _MyAppState extends State<MyApp> {
     }
 
 
-    FlaLoading=false;
+
   }
 
 
 
 
+  String EditNumber(String num)
+  {
+
+    var data='';
+
+    if(num.isNotEmpty)
+      {
+        data =double.tryParse(36545.000.toString())!.toStringAsFixed(0);
+      }else{
+      data='0';
+    }
+
+
+
+
+    return data;
+  }
   Future RunDialog()async{
+    FlaLoading=true;
    await showModalBottomSheet(context: context,
-        isScrollControlled: true,
+        // isScrollControlled: true,
         builder: (ctx){
-         return Column(
-           mainAxisSize: MainAxisSize.min,
-           crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              StatefulBuilder(
-             builder: (context,state){
-                return Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(24),topRight: Radius.circular(24))
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child:  TextApp('تومان', 12,Color(0xff626262),false),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            // child: TextApp('14,000,000', 16,Colors.redAccent,true),
-                            child: TextApp(SplitPrice2(int.parse(Price)), 16,Color(0xff000000),true),
-                          ),
-                          Spacer(),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 16.0),
-                            child: TextApp('آخرين کالای اسكن شده', 10,Colors.black.withOpacity(0.8),false),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: TextApp(NameProduct, 16,Colors.black.withOpacity(0.8),true),
-                          // child: TextApp('ظرف نشكن اعلا', 16,Colors.black.withOpacity(0.8),true),
-
+         return Container(
+           child: Column(
+             mainAxisSize: MainAxisSize.min,
+             crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                StatefulBuilder(
+               builder: (context,state){
+                  return Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(24),topRight: Radius.circular(24))
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child:  TextApp('تومان', 12,Color(0xff626262),false),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              // child: TextApp('14,000,000', 16,Colors.redAccent,true),
+                              child: TextApp(SplitPrice2(int.parse(EditNumber(Price))), 16,Color(0xff000000),true),
+                            ),
+                            Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: TextApp('آخرين کالای اسكن شده', 10,Colors.black.withOpacity(0.8),false),
+                            ),
+                          ],
                         ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        color: Colors.black12.withOpacity(0.1),
-                        height: 1,
-                        margin: EdgeInsets.all(8),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: TextApp(NameProduct, 16,Colors.black.withOpacity(0.8),true),
+                            // child: TextApp('ظرف نشكن اعلا', 16,Colors.black.withOpacity(0.8),true),
 
-                      Count!=0?
-                      Column(
-                        children: [
-                          SizedBox(height: 16,),
-                          Row(
-                            children: [
-                              SizedBox(width: 8,),
-                              TextApp('تومان', 12,Color(0xff626262),false),
-                              SizedBox(width: 8,),
-                              // TextApp(SplitPrice2(int.parse(Priceee)), 16,Color(0xff3CCF4E),true),
-                              // TextApp(SplitPrice2(int.parse(1545484854445.toString())), 16,Color(0xff3d3d3d),true),
-                              TextApp(SplitPrice2(SumAll), 16,Color(0xff3d3d3d),true),
-                              Spacer(),
-                              TextApp('قيمت تمام شده', 10,Colors.redAccent,false),
-                              SizedBox(width: 16,)
-                            ],
-                          )
-                        ],
-                      )
-                          :Container(),
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          color: Colors.black12.withOpacity(0.1),
+                          height: 1,
+                          margin: EdgeInsets.all(8),
+                        ),
+                        Count!=0?
+                        Column(
+                          children: [
+                            SizedBox(height: 16,),
+                            Row(
+                              children: [
+                                SizedBox(width: 8,),
+                                TextApp('تومان', 12,Color(0xff626262),false),
+                                SizedBox(width: 8,),
+                                // TextApp(SplitPrice2(int.parse(Priceee)), 16,Color(0xff3CCF4E),true),
+                                // TextApp(SplitPrice2(int.parse(1545484854445.toString())), 16,Color(0xff3d3d3d),true),
+                                TextApp(SplitPrice2(SumAll), 16,Color(0xff3d3d3d),true),
+                                Spacer(),
+                                TextApp('قيمت تمام شده', 10,Colors.redAccent,false),
+                                SizedBox(width: 16,)
+                              ],
+                            )
+                          ],
+                        ) :Container(),
+                        SizedBox(height: 16,),
+                        Row(
+                          children: [
+                            SizedBox(width: 8,),
+                            InkWell(
+                                onTap: (){
+                                  if(Count!=1&&Count!=0)
+                                  {
+                                    Count=Count-1;
+                                    SumAll=Count*5000;
+                                  }else
+                                  {
+                                    Count=0;
+                                    SumAll=0;
+                                  }
 
-
-
-                      SizedBox(height: 16,),
-                      Row(
-                        children: [
-                          SizedBox(width: 8,),
-                          InkWell(
-                              onTap: (){
-                                if(Count!=1&&Count!=0)
-                                {
-                                  Count=Count-1;
+                                  state(() {});
+                                },
+                                child: SvgPicture.asset('assets/min.svg',width: 50,height: 50,color: Colors.black38)),
+                            SizedBox(width: 16,),
+                            TextApp(Count.toString(), 24, Colors.black, true),
+                            SizedBox(width: 16,),
+                            InkWell(
+                                onTap: (){
+                                  Count=Count+1;
                                   SumAll=Count*5000;
-                                }else
-                                {
-                                  Count=0;
-                                  SumAll=0;
-                                }
+                                  state(() {
+                                  });
+                                },
+                                child: SvgPicture.asset('assets/addplus.svg',width: 50,height: 50,color: Colors.redAccent,)),
+                            SizedBox(width: 8,),
 
-                                state(() {});
-                              },
-                              child: SvgPicture.asset('assets/min.svg',width: 50,height: 50,color: Colors.black38)),
-                          SizedBox(width: 16,),
-                          TextApp(Count.toString(), 24, Colors.black, true),
-                          SizedBox(width: 16,),
-                          InkWell(
-                              onTap: (){
-                                Count=Count+1;
-                                SumAll=Count*5000;
-                                state(() {
-                                });
-                              },
-                              child: SvgPicture.asset('assets/addplus.svg',width: 50,height: 50,color: Colors.redAccent,)),
-                          SizedBox(width: 8,),
-
-                          Expanded(child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.white,
-                              side: BorderSide(color: Colors.black38, width: 2),
-                            ),
-                            onPressed: (){
-                              MSg='';
-                              FlagIsGreen=false;
-                              SumAll=0;
-                              Count=0;
-                              state(() {
-
-                              });
-                            },
-                            child: Text('انصراف',style: TextStyle(color:Colors.black38,fontWeight: FontWeight.bold,fontSize: 14),),
-                          )),
-                          SizedBox(width: 8,),
-                          Expanded(child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.redAccent,
-                            ),
-                            onPressed: (){
-                              if(Count!=0)
-                              {
-                                TempOrder s=TempOrder();
-                                FlagError=true;
-                                s.SumAll=SumAll;
-                                // s.Name=NameProduct;
-                                s.Name='ظرف نشكن اعلا';
-                                s.Coka=125;
-                                s.Count=Count;
-                                s.Price=5000;
-                                Products.add(s);
+                            Expanded(child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.white,
+                                side: BorderSide(color: Colors.black38, width: 2),
+                              ),
+                              onPressed: (){
+                                MSg='';
+                                FlagIsGreen=false;
                                 SumAll=0;
                                 Count=0;
-                                MSg="با موفقيت به سبد خريد اضافه شد";
-                                FlagIsGreen=true;
-                                startTimer();
-                                tempOrder=s;
                                 state(() {
 
                                 });
-                                Navigator.pop(context);
-                              }
+                              },
+                              child: Text('انصراف',style: TextStyle(color:Colors.black38,fontWeight: FontWeight.bold,fontSize: 14),),
+                            )),
+                            SizedBox(width: 8,),
+                            Expanded(child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.redAccent,
+                              ),
+                              onPressed: (){
+                                if(Count!=0)
+                                {
+                                  TempOrder s=TempOrder();
+                                  FlagError=true;
+                                  s.SumAll=SumAll;
+                                  s.Name=NameProduct;
+                                  // s.Name='ظرف نشكن اعلا';
+                                  s.Coka=Bar;
+                                  s.Count=Count;
+                                  s.Price=double.tryParse(EditNumber(Price))!;
+                                  Products.add(s);
+                                  SumAll=0;
+                                  Count=0;
+                                  MSg="با موفقيت به سبد خريد اضافه شد";
+                                  FlagIsGreen=true;
+                                  startTimer();
+                                  tempOrder=s;
+                                  state(() {
+
+                                  });
+                                  Navigator.pop(context);
+                                }
 
 
-                            },
-                            child: Text('ثبت',style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                          )),
-                          SizedBox(width: 8,),
-                        ],
-                      ),
-                      SizedBox(height: 16,)
+                              },
+                              child: Text('ثبت',style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                            )),
+                            SizedBox(width: 8,),
+                          ],
+                        ),
+                        SizedBox(height: 16,)
+                      ],
+                    ),
+                  );
+           }
 
-                    ],
-                  ),
-                );
-         }
-
-              )
-            ],
-      );
+                )
+              ],
+      ),
+         );
     });
 
+   print('object'+'Nima');
+   FlaLoading=false;
 
-   setState(() {
 
-   });
   }
   String SplitPrice2(dynamic price){
+    // var f = NumberFormat("###,###,###,###", "en_US");
     var f = NumberFormat("###,###,###,###", "en_US");
     return   f.format(price).toString();
   }
@@ -341,6 +357,7 @@ class _MyAppState extends State<MyApp> {
 
 
 
+  String Bar="";
   bool FlagIsGreen=false;
   // This widget is the root of your application.
   @override
@@ -359,20 +376,20 @@ class _MyAppState extends State<MyApp> {
              children: [
                MobileScanner(
                  controller: mobileScannerController,
-                 startDelay: false,
+                 startDelay: true,
                  onDetect: (BarcodeCapture barcodes)  async{
 
+                   print('FlaLoading'+FlaLoading.toString());
                    if(FlaLoading==false)
                      {
                        FlaLoading=true;
-                       String Bar="";
+                       String Bar2="";
                        for (final barcode in barcodes.barcodes) {
-                         Bar=barcode.rawValue.toString();
+                         Bar2=barcode.rawValue.toString();
                        }
 
 
-
-
+                       Bar=Bar2;
                        Run(Bar);
                      }
 
@@ -386,12 +403,14 @@ class _MyAppState extends State<MyApp> {
                  right: 0,
                  bottom: 0,
                  child: Container(
+                   width: double.infinity,
                    decoration: BoxDecoration(
                        color: Colors.white,
-                       borderRadius: BorderRadius.only(bottomLeft: Radius.circular(24),bottomRight: Radius.circular(24))
+                       borderRadius: BorderRadius.only(topLeft: Radius.circular(24),topRight: Radius.circular(24))
                    ),
                    child: Column(
                      crossAxisAlignment: CrossAxisAlignment.end,
+                     mainAxisSize: MainAxisSize.min,
                      children: [
                        Padding(
                          padding: const EdgeInsets.all(8.0),
@@ -404,7 +423,7 @@ class _MyAppState extends State<MyApp> {
                                FlagIsGreen?
                                    Row(
                                      children: [
-                                       Expanded(child: ElevatedButton(
+                                       ElevatedButton(
                                          style: ElevatedButton.styleFrom(
                                            primary: Colors.white,
                                            side: BorderSide(color: Colors.black38, width: 2),
@@ -420,7 +439,7 @@ class _MyAppState extends State<MyApp> {
                                            });
                                          },
                                          child: Text('انصراف',style: TextStyle(color:Colors.black38,fontWeight: FontWeight.bold),),
-                                       )),
+                                       ),
 
                                      ],
                                    ):Container(),
