@@ -9,6 +9,7 @@ import 'dart:ffi';
 import 'package:appcontact/AddContact.dart';
 import 'package:appcontact/BoxIndictor.dart';
 import 'package:appcontact/ListContact.dart';
+import 'package:appcontact/ListOrders.dart';
 import 'package:appcontact/TextApp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -334,7 +335,7 @@ class _MyAppState extends State<MyApp> {
   }
 
 
-  int SumAll=0;
+  double SumAll=0;
   int Count=0;
 
   List<TempOrder> Products=[];
@@ -370,113 +371,116 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'IranSans',
         primarySwatch: Colors.blue,
       ),
-      home: SafeArea(
-        child: Scaffold(
-          body: Stack(
-             children: [
-               MobileScanner(
-                 controller: mobileScannerController,
-                 startDelay: true,
-                 onDetect: (BarcodeCapture barcodes)  async{
+      home:ListOrders([]));
 
-                   print('FlaLoading'+FlaLoading.toString());
-                   if(FlaLoading==false)
-                     {
-                       FlaLoading=true;
-                       String Bar2="";
-                       for (final barcode in barcodes.barcodes) {
-                         Bar2=barcode.rawValue.toString();
-                       }
+      // SafeArea(
+      //   child: Scaffold(
+      //     body: Stack(
+      //        children: [
+      //          MobileScanner(
+      //            controller: mobileScannerController,
+      //            startDelay: true,
+      //            onDetect: (BarcodeCapture barcodes)  async{
+      //
+      //              print('FlaLoading'+FlaLoading.toString());
+      //              if(FlaLoading==false)
+      //                {
+      //                  FlaLoading=true;
+      //                  String Bar2="";
+      //                  for (final barcode in barcodes.barcodes) {
+      //                    Bar2=barcode.rawValue.toString();
+      //                  }
+      //
+      //
+      //                  Bar=Bar2;
+      //                  Run(Bar);
+      //                }
+      //
+      //              // var Data=await ApiService.Login(barcodes.raw.toString());
+      //              // print(Data.toJson().toString());
+      //            },),
+      //          QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5),),
+      //          MSg.isNotEmpty&&FlagError?
+      //          Positioned(
+      //            left: 0,
+      //            right: 0,
+      //            bottom: 0,
+      //            child: Container(
+      //              width: double.infinity,
+      //              decoration: BoxDecoration(
+      //                  color: Colors.white,
+      //                  borderRadius: BorderRadius.only(topLeft: Radius.circular(24),topRight: Radius.circular(24))
+      //              ),
+      //              child: Column(
+      //                crossAxisAlignment: CrossAxisAlignment.end,
+      //                mainAxisSize: MainAxisSize.min,
+      //                children: [
+      //                  Padding(
+      //                    padding: const EdgeInsets.all(8.0),
+      //                    child: Padding(
+      //                      padding: const EdgeInsets.only(right: 16.0),
+      //                      child: Row(
+      //
+      //                        children: [
+      //                          SizedBox(width: 8,),
+      //                          FlagIsGreen?
+      //                              Row(
+      //                                children: [
+      //                                  ElevatedButton(
+      //                                    style: ElevatedButton.styleFrom(
+      //                                      primary: Colors.white,
+      //                                      side: BorderSide(color: Colors.black38, width: 2),
+      //                                    ),
+      //                                    onPressed: (){
+      //                                      MSg='';
+      //                                      FlagIsGreen=false;
+      //                                      SumAll=0;
+      //                                      Count=0;
+      //                                      DelItem();
+      //                                      setState(() {
+      //
+      //                                      });
+      //                                    },
+      //                                    child: Text('انصراف',style: TextStyle(color:Colors.black38,fontWeight: FontWeight.bold),),
+      //                                  ),
+      //
+      //                                ],
+      //                              ):Container(),
+      //                          Spacer(),
+      //                          TextApp(MSg, 14,FlagIsGreen?Color(0xff21AA58):Colors.redAccent,true),
+      //                        ],
+      //                      ),
+      //                    ),
+      //                  ),
+      //                ],
+      //              ),
+      //            ),
+      //          )
+      //          :Container(),
+      //          Products.isNotEmpty?
+      //          Positioned(
+      //              top: 16,
+      //              left: 16,
+      //              child: InkWell(
+      //                onTap: (){
+      //                  RunDialog();
+      //                },
+      //                child: Container(
+      //                    child: BoxIndictor(Products.length.toString())),
+      //              )):Container()
+      //
+      //
+      //              // :Container(),
+      //          //
+      //          // NameProduct.isEmpty?Container():
+      //
+      //        ],
+      //     ),
+      //   ),
+      // ),
 
+    // );
 
-                       Bar=Bar2;
-                       Run(Bar);
-                     }
-
-                   // var Data=await ApiService.Login(barcodes.raw.toString());
-                   // print(Data.toJson().toString());
-                 },),
-               QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5),),
-               MSg.isNotEmpty&&FlagError?
-               Positioned(
-                 left: 0,
-                 right: 0,
-                 bottom: 0,
-                 child: Container(
-                   width: double.infinity,
-                   decoration: BoxDecoration(
-                       color: Colors.white,
-                       borderRadius: BorderRadius.only(topLeft: Radius.circular(24),topRight: Radius.circular(24))
-                   ),
-                   child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.end,
-                     mainAxisSize: MainAxisSize.min,
-                     children: [
-                       Padding(
-                         padding: const EdgeInsets.all(8.0),
-                         child: Padding(
-                           padding: const EdgeInsets.only(right: 16.0),
-                           child: Row(
-
-                             children: [
-                               SizedBox(width: 8,),
-                               FlagIsGreen?
-                                   Row(
-                                     children: [
-                                       ElevatedButton(
-                                         style: ElevatedButton.styleFrom(
-                                           primary: Colors.white,
-                                           side: BorderSide(color: Colors.black38, width: 2),
-                                         ),
-                                         onPressed: (){
-                                           MSg='';
-                                           FlagIsGreen=false;
-                                           SumAll=0;
-                                           Count=0;
-                                           DelItem();
-                                           setState(() {
-
-                                           });
-                                         },
-                                         child: Text('انصراف',style: TextStyle(color:Colors.black38,fontWeight: FontWeight.bold),),
-                                       ),
-
-                                     ],
-                                   ):Container(),
-                               Spacer(),
-                               TextApp(MSg, 14,FlagIsGreen?Color(0xff21AA58):Colors.redAccent,true),
-                             ],
-                           ),
-                         ),
-                       ),
-                     ],
-                   ),
-                 ),
-               )
-               :Container(),
-               Products.isNotEmpty?
-               Positioned(
-                   top: 16,
-                   left: 16,
-                   child: InkWell(
-                     onTap: (){
-                       RunDialog();
-                     },
-                     child: Container(
-                         child: BoxIndictor(Products.length.toString())),
-                   )):Container()
-
-
-                   // :Container(),
-               //
-               // NameProduct.isEmpty?Container():
-
-             ],
-          ),
-        ),
-      ),
-
-    );
   }
 }
 
