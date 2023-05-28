@@ -56,7 +56,9 @@ class _MyAppState extends State<MyApp> {
   bool FlaLoading=false;
   Future Run(String S)async{
     FlaLoading=true;
-    var s=await ApiService.Login(S);
+    var s=await ApiService.Login(S,FlaLoading);
+    print(s);
+    print('NimaMoradi');
     if(s!=null)
       {
         if(s.success)
@@ -71,7 +73,7 @@ class _MyAppState extends State<MyApp> {
             FlagError=false;
             Price=s.priceKala.toString();
             NameProduct=s.naka.toString();
-
+            Shka=s.shka;
             RunDialog();
 
           }else{
@@ -249,25 +251,53 @@ class _MyAppState extends State<MyApp> {
                               onPressed: (){
                                 if(Count!=0)
                                 {
-                                  TempOrder s=TempOrder();
-                                  FlagError=true;
-                                  s.SumAll=SumAll;
-                                  s.Name=NameProduct;
-                                  // s.Name='ظرف نشكن اعلا';
-                                  s.Coka=Bar;
-                                  s.Count=Count;
-                                  s.Price=double.tryParse(EditNumber(Price))!;
-                                  Products.add(s);
-                                  SumAll=0;
-                                  Count=0;
-                                  MSg="با موفقيت به سبد خريد اضافه شد";
-                                  FlagIsGreen=true;
-                                  startTimer();
-                                  tempOrder=s;
-                                  state(() {
+                                  var Finded=Products.any((element) => element.shka==Shka);
+                                  if(Finded)
+                                    {
+                                      var s3=Products.indexWhere((element) => element.shka==Shka);
+                                      TempOrder s=TempOrder();
+                                      FlagError=true;
+                                      s.SumAll=SumAll;
+                                      s.Name=NameProduct;
+                                      // s.Name='ظرف نشكن اعلا';
+                                      s.Coka=Bar;
+                                      s.Count=Count;
+                                      s.shka=Shka;
+                                      s.Price=double.tryParse(EditNumber(Price))!;
+                                      Products[s3]=s;
+                                      SumAll=0;
+                                      Count=0;
+                                      MSg="با موفقيت به سبد خريد اضافه شد";
+                                      FlagIsGreen=true;
+                                      startTimer();
+                                      tempOrder=s;
+                                      state(() {
 
-                                  });
-                                  Navigator.pop(context);
+                                      });
+                                      Navigator.pop(context);
+                                    }else{
+                                    TempOrder s=TempOrder();
+                                    FlagError=true;
+                                    s.SumAll=SumAll;
+                                    s.Name=NameProduct;
+                                    // s.Name='ظرف نشكن اعلا';
+                                    s.Coka=Bar;
+                                    s.Count=Count;
+                                    s.shka=Shka;
+                                    s.Price=double.tryParse(EditNumber(Price))!;
+                                    Products.add(s);
+                                    SumAll=0;
+                                    Count=0;
+                                    MSg="با موفقيت به سبد خريد اضافه شد";
+                                    FlagIsGreen=true;
+                                    startTimer();
+                                    tempOrder=s;
+                                    state(() {
+
+                                    });
+                                    Navigator.pop(context);
+                                  }
+                                 
                                 }
 
 
@@ -337,6 +367,7 @@ class _MyAppState extends State<MyApp> {
 
   double SumAll=0;
   int Count=0;
+  String Shka="";
 
   List<TempOrder> Products=[];
   @override
@@ -371,115 +402,121 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'IranSans',
         primarySwatch: Colors.blue,
       ),
-      home:ListOrders([]));
+      // home:ListOrders([]));
+      home:
 
-      // SafeArea(
-      //   child: Scaffold(
-      //     body: Stack(
-      //        children: [
-      //          MobileScanner(
-      //            controller: mobileScannerController,
-      //            startDelay: true,
-      //            onDetect: (BarcodeCapture barcodes)  async{
-      //
-      //              print('FlaLoading'+FlaLoading.toString());
-      //              if(FlaLoading==false)
-      //                {
-      //                  FlaLoading=true;
-      //                  String Bar2="";
-      //                  for (final barcode in barcodes.barcodes) {
-      //                    Bar2=barcode.rawValue.toString();
-      //                  }
-      //
-      //
-      //                  Bar=Bar2;
-      //                  Run(Bar);
-      //                }
-      //
-      //              // var Data=await ApiService.Login(barcodes.raw.toString());
-      //              // print(Data.toJson().toString());
-      //            },),
-      //          QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5),),
-      //          MSg.isNotEmpty&&FlagError?
-      //          Positioned(
-      //            left: 0,
-      //            right: 0,
-      //            bottom: 0,
-      //            child: Container(
-      //              width: double.infinity,
-      //              decoration: BoxDecoration(
-      //                  color: Colors.white,
-      //                  borderRadius: BorderRadius.only(topLeft: Radius.circular(24),topRight: Radius.circular(24))
-      //              ),
-      //              child: Column(
-      //                crossAxisAlignment: CrossAxisAlignment.end,
-      //                mainAxisSize: MainAxisSize.min,
-      //                children: [
-      //                  Padding(
-      //                    padding: const EdgeInsets.all(8.0),
-      //                    child: Padding(
-      //                      padding: const EdgeInsets.only(right: 16.0),
-      //                      child: Row(
-      //
-      //                        children: [
-      //                          SizedBox(width: 8,),
-      //                          FlagIsGreen?
-      //                              Row(
-      //                                children: [
-      //                                  ElevatedButton(
-      //                                    style: ElevatedButton.styleFrom(
-      //                                      primary: Colors.white,
-      //                                      side: BorderSide(color: Colors.black38, width: 2),
-      //                                    ),
-      //                                    onPressed: (){
-      //                                      MSg='';
-      //                                      FlagIsGreen=false;
-      //                                      SumAll=0;
-      //                                      Count=0;
-      //                                      DelItem();
-      //                                      setState(() {
-      //
-      //                                      });
-      //                                    },
-      //                                    child: Text('انصراف',style: TextStyle(color:Colors.black38,fontWeight: FontWeight.bold),),
-      //                                  ),
-      //
-      //                                ],
-      //                              ):Container(),
-      //                          Spacer(),
-      //                          TextApp(MSg, 14,FlagIsGreen?Color(0xff21AA58):Colors.redAccent,true),
-      //                        ],
-      //                      ),
-      //                    ),
-      //                  ),
-      //                ],
-      //              ),
-      //            ),
-      //          )
-      //          :Container(),
-      //          Products.isNotEmpty?
-      //          Positioned(
-      //              top: 16,
-      //              left: 16,
-      //              child: InkWell(
-      //                onTap: (){
-      //                  RunDialog();
-      //                },
-      //                child: Container(
-      //                    child: BoxIndictor(Products.length.toString())),
-      //              )):Container()
-      //
-      //
-      //              // :Container(),
-      //          //
-      //          // NameProduct.isEmpty?Container():
-      //
-      //        ],
-      //     ),
-      //   ),
-      // ),
+      SafeArea(
+        child: Scaffold(
+          body: Stack(
+             children: [
+               MobileScanner(
+                 controller: mobileScannerController,
+                 startDelay: true,
+                 onDetect: (BarcodeCapture barcodes)  async{
 
-    // );
+                   print('FlaLoading'+FlaLoading.toString());
+                   if(FlaLoading==false)
+                     {
+                       FlaLoading=true;
+                       String Bar2="";
+                       for (final barcode in barcodes.barcodes) {
+                         Bar2=barcode.rawValue.toString();
+                       }
+
+
+                       Bar=Bar2;
+                       print('Bar : '+Bar);
+                       Run(Bar);
+                     }
+
+                   // var Data=await ApiService.Login(barcodes.raw.toString());
+                   // print(Data.toJson().toString());
+                 },),
+               QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5),),
+               MSg.isNotEmpty&&FlagError?
+               Positioned(
+                 left: 0,
+                 right: 0,
+                 bottom: 0,
+                 child: Container(
+                   width: double.infinity,
+                   decoration: BoxDecoration(
+                       color: Colors.white,
+                       borderRadius: BorderRadius.only(topLeft: Radius.circular(24),topRight: Radius.circular(24))
+                   ),
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.end,
+                     mainAxisSize: MainAxisSize.min,
+                     children: [
+                       Padding(
+                         padding: const EdgeInsets.all(8.0),
+                         child: Padding(
+                           padding: const EdgeInsets.only(right: 16.0),
+                           child: Row(
+
+                             children: [
+                               SizedBox(width: 8,),
+                               FlagIsGreen?
+                                   Row(
+                                     children: [
+                                       ElevatedButton(
+                                         style: ElevatedButton.styleFrom(
+                                           primary: Colors.white,
+                                           side: BorderSide(color: Colors.black38, width: 2),
+                                         ),
+                                         onPressed: (){
+                                           MSg='';
+                                           FlagIsGreen=false;
+                                           SumAll=0;
+                                           Count=0;
+                                           DelItem();
+                                           setState(() {
+
+                                           });
+                                         },
+                                         child: Text('انصراف',style: TextStyle(color:Colors.black38,fontWeight: FontWeight.bold),),
+                                       ),
+
+                                     ],
+                                   ):Container(),
+                               Spacer(),
+                               TextApp(MSg, 14,FlagIsGreen?Color(0xff21AA58):Colors.redAccent,true),
+                             ],
+                           ),
+                         ),
+                       ),
+                     ],
+                   ),
+                 ),
+               )
+               :Container(),
+               Products.isNotEmpty?
+               Positioned(
+                   top: 16,
+                   left: 16,
+                   child: InkWell(
+                     onTap: () async{
+                       var ss=await Navigator.push(
+                         context,
+                         MaterialPageRoute(builder: (context) =>   ListOrders(Products)),
+                       );
+                       setState(() {
+
+                       });
+                     },
+                     child: Container(
+                         child: BoxIndictor(Products.length.toString())),
+                   )):Container()
+                   // :Container(),
+               //
+               // NameProduct.isEmpty?Container():
+
+             ],
+          ),
+        ),
+      ),
+
+    );
 
   }
 }

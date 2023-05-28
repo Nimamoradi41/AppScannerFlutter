@@ -14,7 +14,13 @@ import 'ModelScanner.dart';
 
 
 class ApiService{
-  static Future<ModelScanner> Login(String Code) async{
+
+
+  static  add(){
+
+  }
+
+  static Future<ModelScanner> Login(String Code,bool Flag) async{
     var login;
 
 
@@ -27,8 +33,22 @@ class ApiService{
 
 
     print(request.fields.toString());
-    http.StreamedResponse response = await request.send().timeout(
-      Duration(seconds: 10)) ;
+    http.StreamedResponse response = await request.send()
+        .timeout(
+      Duration(seconds: 10),
+      onTimeout: () {
+        print('GGGGGGGGG');
+        Flag=false;
+        return login;
+        return   add();
+      },
+    ).catchError((error) {
+      print('WWWWWWWW');
+      Flag=false;
+      return login;
+      return login;
+    }) ;
+
 
     print(response.statusCode.toString());
     if (response.statusCode == 200) {
